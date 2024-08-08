@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_weather/bloc/weather_bloc_bloc.dart';
+import 'package:my_weather/data/determine_position.dart';
 import 'package:my_weather/screens/home_screen.dart';
 
 void main() {
@@ -13,8 +16,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
-      
+      home: FutureBuilder(
+        future: determinePosition(),
+        builder: (context, snap) {
+          if (snap.hasData) {
+            return BlocProvider<WeatherBlocBloc>(
+              create: (context) => WeatherBlocBloc()..add(FetchWeather()),
+              child: HomeScreen(),
+            );
+          } else {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

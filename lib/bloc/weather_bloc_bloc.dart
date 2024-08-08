@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:my_weather/data/data.dart';
 import 'package:weather/weather.dart';
 
 part 'weather_bloc_event.dart';
@@ -12,7 +13,7 @@ class WeatherBlocBloc extends Bloc<WeatherBlocEvent, WeatherBlocState> {
       try {
         Position position = await Geolocator.getCurrentPosition();
         WeatherFactory wf =
-            WeatherFactory("_apiKey", language: Language.ENGLISH);
+            WeatherFactory(API_KEy, language: Language.ENGLISH);
         Weather weather = await wf.currentWeatherByLocation(
             position.latitude, position.longitude);
         emit(WeatherBlocSucess(weather));
